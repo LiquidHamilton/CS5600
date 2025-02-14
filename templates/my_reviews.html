@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reviews</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>My Reviewed Books</h1>
+
+    {% if books %}
+        <ul>
+            {% for book in books %}
+                {% for review in book.reviews %}
+                    {% if review.user_id == session['user_id'] %}
+                        <li>
+                            <a href="{{ url_for('routes.book_details', book_id=book['_id']) }}">{{ book['title'] }}</a> 
+                            by {{ book['author'] }}  
+                            <br>
+                            <strong>Rating:</strong> {{ review.rating }}/5  
+                            <br>
+                            <strong>Review:</strong> {{ review.review_text }}
+                            <br>
+                            <strong>Date Read:</strong> {{ review.date_read }}  
+                            <br>
+                            <a href="{{ url_for('routes.edit_review', book_id=book['_id']) }}">Edit Review</a>
+                        </li>
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't reviewed any books yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('routes.home') }}">Back to Home</a>
+</body>
+</html>

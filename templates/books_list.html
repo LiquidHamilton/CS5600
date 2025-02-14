@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('routes.books') }}">View Book List</a>
+        {% if 'user_id' in session %}
+            <a href="{{ url_for('routes.my_reviews') }}">My Reviews</a>
+            <a href="{{ url_for('routes.add_new_book') }}">Add a New Book</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('routes.home')}}">Home</a>
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.register') }}">Register</a>
+        {% endif %}
+    </div>
+    <h1>All Books</h1>
+    <ul class="book-list">
+        {% for book in books %}
+            <li class="book-item">
+                {% if book['cover_image'] %}
+                    <img class="book-cover" src="{{ url_for('static', filename=book['cover_image'].replace('static/', '')) }}" 
+                         alt="Cover Image of {{ book['title'] }}">
+                {% endif %}
+                <a href="{{ url_for('routes.book_details', book_id=book['_id']) }}">{{ book['title'] }}</a> 
+                by {{ book['author'] }}
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

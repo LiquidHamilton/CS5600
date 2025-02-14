@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('routes.books') }}">View Book List</a>
+        {% if 'user_id' in session %}
+            <a href="{{ url_for('routes.my_reviews') }}">My Reviews</a>
+            <a href="{{ url_for('routes.add_new_book') }}">Add a New Book</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.register') }}">Register</a>
+        {% endif %}
+    </div>
+    
+    <h1>Welcome to Kyle's Book Review App!</h1>
+
+    {% if 'username' in session %}
+        <p>Hello, {{ session['username'] }}!</p>
+    {% endif %}
+
+    <!--Search Bar-->
+    <form action="{{ url_for('routes.search_books') }}" method="GET">
+        <input type="text" name="q" placeholder="Search by title or author" required>
+        <button type="submit">Search</button>
+    </form>
+    <br>
+
+    <h2>Featured Books</h2>
+    <!-- List of books or content goes here -->
+</body>
+</html>

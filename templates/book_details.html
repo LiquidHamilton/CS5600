@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }} - Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>{{ book.title }} <span class="author">by {{ book.author }}</span></h1>
+
+        <div class="book-details">
+            <div class="book-cover">
+                {% if book['cover_image'] %}
+                    <img src="{{ url_for('static', filename=book['cover_image'].replace('static/', '')) }}" 
+                         alt="Cover image of {{ book.title }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/default.webp') }}" 
+                         alt="Default Cover Image">
+                {% endif %}
+            </div>
+
+            <div class="book-info">
+                <p><strong>Genre:</strong> {{ book.genre }}</p>
+                <p><strong>Summary:</strong> {{ book.summary }}</p>
+                <p><strong>Page Count:</strong> {{ book.page_count }}</p>
+                <p><strong>Average Rating:</strong> {{ book.average_rating }} / 5 ({{ book.number_of_ratings }} ratings)</p>
+
+                {% if 'user_id' in session %}
+                    <a href="{{ url_for('routes.edit_book', book_id=book['_id']) }}">
+                        <button class="edit-btn">Edit Book</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <h2>Reviews</h2>
+        <div class="reviews-section">
+            {% if book['reviews'] %}
+                <ul class="review-list">
+                    {% for review in book.reviews %}
+                        <li class="review-item">
+                            <p><strong>{{ review.username }}:</strong> {{ review.review_text }}</p>
+                            <p class="review-meta">⭐ {{ review.rating }}/5 | <i>Read on {{ review.date_read }}</i></p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews yet.</p>
+            {% endif %}
+        </div>
+
+        {% if 'user_id' in session %}
+            {% if existing_review %}
+                <p><strong>You have already reviewed this book.</strong></p>
+                <a href="{{ url_for('routes.edit_review', book_id=book['_id']) }}">
+                    <button class="edit-btn">Edit Your Review</button>
+                </a>
+            {% else %}
+                <div class="review-form">
+                    <h3>Submit Your Review</h3>
+                    <form method="POST">
+                        <label for="rating">Rating (1-5):</label>
+                        <input type="number" name="rating" min="1" max="5" required>
+                        <br>
+
+                        <label for="review">Review:</label>
+                        <textarea name="review" required></textarea>
+                        <br>
+
+                        <label for="date_read">Date Read:</label>
+                        <input type="date" name="date_read" required>
+                        <br>
+
+                        <button class="submit-btn" type="submit">Submit Review</button>
+                    </form>
+                </div>
+            {% endif %}
+        {% else %}
+            <p>You must be logged in to submit a review.</p>
+        {% endif %}
+
+        <div class="navigation-links">
+            <a href="{{ url_for('routes.home') }}">Home</a> |
+            <a href="{{ url_for('routes.books') }}">Back to Book List</a> |
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+    </div>
+
+</body>
+</html>
