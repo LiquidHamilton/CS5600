@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from models import register_user, check_user_login, db
 
+#TESTING
+
 auth = Blueprint('auth', __name__)
 
 # Route for user registration
