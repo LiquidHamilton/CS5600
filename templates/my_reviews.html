@@ -7,6 +7,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="{{ url_for('routes.books') }}">View Book List</a>
+        {% if 'user_id' in session %}
+            <a href="{{ url_for('routes.home') }}">Home</a>
+            <a href="{{ url_for('routes.add_new_book') }}">Add a New Book</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.register') }}">Register</a>
+        {% endif %}
+    </div>
     <h1>My Reviewed Books</h1>
 
     {% if books %}
@@ -34,8 +46,5 @@
     {% else %}
         <p>You haven't reviewed any books yet.</p>
     {% endif %}
-
-    <br>
-    <a href="{{ url_for('routes.home') }}">Back to Home</a>
 </body>
 </html>
