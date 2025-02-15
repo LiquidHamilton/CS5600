@@ -245,3 +245,7 @@ button:hover {
     background: #0056b3;
     font-weight: bold;
 }
+
+ul {
+    list-style-type: none;
+}
